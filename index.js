@@ -1,7 +1,6 @@
 // get display area in our html document
 const section = document.getElementById('bounce-zone');
 const icon = document.getElementById('icon');
-const bounceCounter = document.getElementById('bounce-counter');
 
 // helper functions to turn our numbers into px values
 const intToPx = (pxInt) => {
@@ -15,11 +14,21 @@ const colors = [
     "darkorchid",
     "blueviolet",
     "khaki",
-    "lightpink"
+    "lightpink",
+    "slateblue",
+    "salmon",
+    "plum",
+    "pink"
 ]
+
 // change icon color 
+let lastColor = ''
 const changeColor = () => {
-    return '#' + Math.random().toString(16).slice(2, 8).toUpperCase();
+    do {
+        newColor = colors[Math.floor(Math.random() * colors.length)];
+    } while (lastColor === newColor);
+    lastColor = newColor
+    return newColor
 }
 
 // declare initial variables
@@ -55,26 +64,18 @@ if (Math.floor(Math.random() * 2) == 0) {
 
 // draw background
 const drawBG = () => {
-    section.style.backgroundColor = "black";
+    section.style.backgroundColor = "#262626";
 }
-
-let rectColor = "" || "lightblue";
 
 const updateIconPos = () => {
     icon.style.left = intToPx(iconY);
     icon.style.top = intToPx(iconX);
 }
 
-let bounceCount = 0;
-const updateCounter = () => {
-    bounceCounter.innerText = `Bounce Counter:  ${bounceCount}`;
-}
-
 // create draw function
 const update = () => {
     // draw bg
     drawBG()
-    updateCounter()
     // apply velocity
     iconX += x_vel;
     iconY += y_vel;
@@ -82,12 +83,10 @@ const update = () => {
     if (iconX < 0 && x_vel < 0 || iconX > parseInt(section.style.height) - iconSizeY && x_vel > 0) {
         x_vel = - x_vel
         icon.style.fill = changeColor();
-        bounceCount++
     }
     if (iconY < 0 && y_vel < 0 || iconY > parseInt(section.style.width) - iconSizeX && iconX > 0) {
         y_vel = - y_vel
         icon.style.fill = changeColor();
-        bounceCount++
     }
     // update our icons position on the screen
     updateIconPos()
